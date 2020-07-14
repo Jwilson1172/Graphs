@@ -14,6 +14,8 @@ class Graph:
         """
         Add a vertex to the graph.
         """
+        # could add a conditional branch here to do something
+        # diffrent if the index already occurins in the dictionary
         self.vertices[vertex_id] = set()
         return
 
@@ -112,17 +114,37 @@ class Graph:
         breath-first order.
         """
         # Create an empty queue and enqueue A PATH TO the starting vertex ID
+        q = Queue()
+        q.enqueue([starting_vertex])
+
         # Create a Set to store visited vertices
-        # While the queue is not empty...
-        # Dequeue the first PATH
-        # Grab the last vertex from the PATH
-        # If that vertex has not been visited...
-        # CHECK IF IT'S THE TARGET
-        # IF SO, RETURN PATH
-        # Mark it as visited...
-        # Then add A PATH TO its neighbors to the back of the queue
-        # COPY THE PATH
-        # APPEND THE NEIGHBOR TO THE BACK
+        visited = set()
+        # While the queue is not empty
+        while q.size() > 0:
+            # Dequeue the first PATH
+            path = q.dequeue()
+
+            # Grab the last vertex from the PATH
+            v = path[-1]
+            # If that vertex has not been visited...
+            if v not in visited:
+                # CHECK IF IT'S THE TARGET
+                # IF SO, RETURN PATH
+                if v == destination_vertex:
+                    return path
+
+                # Mark it as visited...
+                visited.add(v)
+                # Then add A PATH TO its neighbors to the back of the queue
+                # COPY THE PATH
+                # APPEND THE NEIGHOR TO THE BACK
+
+                for next_vert in self.get_neighbors(v):
+                    new_path = list(path)  # Copy the list
+                    new_path.append(next_vert)
+                    q.enqueue(new_path)
+        # If we got here, we didn't find it
+        return None
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -205,20 +227,3 @@ if __name__ == '__main__':
     '''
     print(graph.dfs(1, 6))
     print(graph.dfs_recursive(1, 6))
-
-
-class Graph:
-    def __init__(self):
-        self.vertices = {}
-
-    def add_vertex(self, vertex_id):
-        self.vertices[vertex_id] = set()  # this will hold edges
-
-    def add_edge(self, v1, v2):
-        if v1 in self.vertices and v2 in self.vertices:
-            self.vertices[v1].add(v2)  # there's an edge from v1 to v2
-        else:
-            raise IndexError("nonexistent vert")
-
-    def get_neighbors(self, vertex_id):
-        return self.vertices[vertex_id]
