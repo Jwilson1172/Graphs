@@ -6,13 +6,26 @@ The functionality behind creating users and friendships has been completed alrea
 
 Your client is also interested in how the performance will scale as more users join so she has asked you to implement a feature that creates large numbers of users to the network and assigns them a random distribution of friends.
 
+
+add __str__
+
+
+
+
+
 ## 1. Generating Users and Friendships
 
 It will be easier to build your extended social network if you have users to test it with. `populate_graph()` takes in a number of users to create and the average number of friends each user should have and creates them.
 
+
+
+
 ```
 >>> sg = SocialGraph()
 >>> sg.populate_graph(10, 2)  # Creates 10 users with an average of 2 friends each
+
+- using a bag of users use np.random.choose to select avg number of friends each user has.
+
 >>> print(sg.friendships)
 {1: {8, 10, 5}, 2: {10, 5, 7}, 3: {4}, 4: {9, 3}, 5: {8, 1, 2}, 6: {10}, 7: {2}, 8: {1, 5}, 9: {4}, 10: {1, 2, 6}}
 >>> sg = SocialGraph()
@@ -39,6 +52,11 @@ Now that you have a graph full of users and friendships, you can crawl through t
 >>> print(connections)
 {1: [1], 8: [1, 8], 10: [1, 10], 5: [1, 5], 2: [1, 10, 2], 6: [1, 10, 6], 7: [1, 10, 2, 7]}
 ```
+<div>
+    This is going to interesting
+</div>
+
+
 Note that in this sample, Users 3, 4 and 9 are not in User 1's extended social network.
 
 * Hint 1: What kind of graph search guarantees you a shortest path?

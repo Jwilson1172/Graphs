@@ -165,6 +165,24 @@ class Graph:
         pass  # TODO
 
 
+def dfs_recursive(self, start_vert, target_value, visited=None, path=None):
+    if visited is None:
+        visited = set()
+    if path is None:
+        path = []
+    visited.add(start_vert)
+    path = path + [start_vert]
+    if start_vert == target_value:
+        return path
+    for child_vert in self.get_neighbors(start_vert):
+        if child_vert not in visited:
+            new_path = self.dfs_recursive(child_vert, target_value, visited,
+                                          path)
+            if new_path:
+                return new_path
+    return None
+
+
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
     # https://github.com/LambdaSchool/Graphs/blob/master/objectives/breadth-first-search/img/bfs-visit-order.png
