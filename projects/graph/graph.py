@@ -108,6 +108,9 @@ class Graph:
         pass  # TODO
 
     def bfs(self, starting_vertex, destination_vertex):
+        # this method is a good solution for the social network problem
+        # because the bfs keeps track of the path, it can be used to find the
+        # solution quickly.
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in

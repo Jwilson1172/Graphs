@@ -1,12 +1,27 @@
 from room import Room
 from player import Player
 from world import World
+from time import time
 
 import random
 from ast import literal_eval
 
 
-# add the transversal method
+def timeit(func, return_time=False):
+    """A function that takes a function as an input then times how long it
+    takes to compleat said function
+    """
+    st = time()
+    ret = func()
+    stt = time()
+    print(f"Execution time: {stt - st}\n")
+
+    # i wanna make sure that the funtionn still behaves like a function I'm
+    # just wrapoping the funtion in a timing block
+    return ret
+
+
+# add transversal method
 def get_traversal(room_graph, player):
 
     traversal_path = []
@@ -17,11 +32,15 @@ def get_traversal(room_graph, player):
     room_queue = {}
     explored = set()
 
+    # thinking about a faster way to do this with multiprocessing library
+    # taking each chunk and breaking it up into multiple explorers,
+    # the problem is needed in atomic global map to add to, something
+    # I dont have time to do at the moment but something that i would look into
+
+    # while there are still rooms to explore run through the graph
     while len(explored) < len(room_graph):
 
         current_room = player.current_room.id
-        # print out the current room
-        print(current_room)
 
         if current_room not in explored:
             # if the room is not visited then we have to set it as seen
