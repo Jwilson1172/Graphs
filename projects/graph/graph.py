@@ -155,35 +155,55 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        paths = Stack()
+        paths.push([starting_vertex])
+
+        vertex_visited = set()
+
+        while paths.size() > 0:
+            path = paths.pop()
+
+            current_vertex = path[-1]
+
+            if current_vertex not in vertex_visited:
+                if current_vertex == destination_vertex:
+                    return path
+
+                else:
+                    for i in self.vertices[current_vertex]:
+                        paths.push(path + [i])
+
+            vertex_visited.add(current_vertex)
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
-
         This should be done using recursion.
         """
-        pass  # TODO
+        if vertex_visited is None:
+            vertex_visited = set()
 
+        if paths is None:
+            paths = []
 
-def dfs_recursive(self, start_vert, target_value, visited=None, path=None):
-    if visited is None:
-        visited = set()
-    if path is None:
-        path = []
-    visited.add(start_vert)
-    path = path + [start_vert]
-    if start_vert == target_value:
-        return path
-    for child_vert in self.get_neighbors(start_vert):
-        if child_vert not in visited:
-            new_path = self.dfs_recursive(child_vert, target_value, visited,
-                                          path)
-            if new_path:
-                return new_path
-    return None
+        vertex_visited.add(starting_vertex)
+        paths = paths + [starting_vertex]
+
+        if starting_vertex == destination_vertex:
+            return paths
+
+        for i in self.get_neighbors(starting_vertex):
+            if i not in vertex_visited:
+                new_path = self.dfs_recursive(
+                    starting_vertex=i,
+                    destination_vertex=destination_vertex,
+                    paths=paths,
+                    vertex_visited=vertex_visited)
+
+                if new_path:
+                    return new_path
 
 
 if __name__ == '__main__':
