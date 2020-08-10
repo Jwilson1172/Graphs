@@ -155,9 +155,11 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
+        # make stack and add the starting vertex to the stack
         paths = Stack()
         paths.push([starting_vertex])
 
+        # make a set to store the vertex's that have already been visited
         vertex_visited = set()
 
         while paths.size() > 0:
@@ -182,18 +184,23 @@ class Graph:
         depth-first order.
         This should be done using recursion.
         """
+        # cond init the local variables
         if vertex_visited is None:
             vertex_visited = set()
 
         if paths is None:
             paths = []
 
+        # append to the visited vertexs and path list
         vertex_visited.add(starting_vertex)
         paths = paths + [starting_vertex]
 
+        # exit condition
         if starting_vertex == destination_vertex:
             return paths
 
+        # for each neghbor for the starting vertex if it hasn't been visited
+        # call the dfs using the neigbor as the starting vertex
         for i in self.get_neighbors(starting_vertex):
             if i not in vertex_visited:
                 new_path = self.dfs_recursive(
