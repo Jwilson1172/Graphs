@@ -7,22 +7,8 @@ import random
 from ast import literal_eval
 
 
-def timeit(func, return_time=False):
-    """A function that takes a function as an input then times how long it
-    takes to compleat said function
-    """
-    st = time()
-    ret = func()
-    stt = time()
-    print(f"Execution time: {stt - st}\n")
-
-    # i wanna make sure that the funtionn still behaves like a function I'm
-    # just wrapoping the funtion in a timing block
-    return ret
-
-
 # add transversal method
-def get_traversal(room_graph, player):
+def get_traversal_first(room_graph, player):
 
     traversal_path = []
 
@@ -31,11 +17,6 @@ def get_traversal(room_graph, player):
 
     room_queue = {}
     explored = set()
-
-    # thinking about a faster way to do this with multiprocessing library
-    # taking each chunk and breaking it up into multiple explorers,
-    # the problem is needed in atomic global map to add to, something
-    # I dont have time to do at the moment but something that i would look into
 
     # while there are still rooms to explore run through the graph
     while len(explored) < len(room_graph):
@@ -48,18 +29,63 @@ def get_traversal(room_graph, player):
             explored.add(current_room)
             room_queue[current_room] = player.current_room.get_exits()
 
-        elif len(room_queue[current_room]) == 0:
-            # if there are no exits then we want toi back track to get to an exit
-            prev_dir = previous_directions.pop()
-            traversal_path.append(prev_dir)
-            player.travel(prev_dir)
-        else:
+        elif len(room_queue[current_room]) != 0:
             # finally if the room has already been seen we want to back track
             # to get to un explored areas
             next_dir = room_queue[current_room].pop()
             traversal_path.append(next_dir)
             previous_directions.append(opposite_directions[next_dir])
             player.travel(next_dir)
+
+        elif len(room_queue[current_room]) == 0:
+            # if there are no exits then we want toi back track to get to an exit
+            prev_dir = previous_directions.pop()
+            traversal_path.append(prev_dir)
+            player.travel(prev_dir)
+
+        # unreachable
+        else:
+            pass
+    return traversal_path
+
+
+def get_traversal(room_graph, player):
+    traversal_path = []
+
+    previous_directions = []
+    opposite_directions = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
+
+    room_queue = {}
+    explored = set()
+
+    while len(explored) < len(room_graph):
+
+        current_room = player.current_room.id
+
+        if current_room not in explored:
+            # if the room is not visited then we have to set it as seen
+            # and get the exits for the room
+            explored.add(current_room)
+            # should return a  list of directions that can be explored
+            # from the given room
+            room_queue[current_room] = player.current_room.get_exits()
+
+        elif len(room_queue[current_room]) != 0:
+            next_dir = room_queue[current_room].pop()
+            traversal_path.append(next_dir)
+            previous_directions.append(opposite_directions[next_dir])
+            player.travel(next_dir)
+
+        elif len(room_queue[current_room]) == 0:
+            # if there are no exits then we want toi back track to get to an exit
+            prev_dir = previous_directions.pop()
+            traversal_path.append(prev_dir)
+            player.travel(prev_dir)
+
+        # unreachable
+        else:
+            pass
+
     return traversal_path
 
 
@@ -78,7 +104,9 @@ room_graph = literal_eval(open(map_file, "r").read())
 world.load_graph(room_graph)
 
 # Print an ASCII map
-world.print_rooms()
+# comming it out because I dont want to see the rooms on the tests while
+# tring to optimize
+# world.print_rooms()
 
 player = Player(world.starting_room)
 
